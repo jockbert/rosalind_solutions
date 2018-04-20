@@ -25,3 +25,19 @@ object RNA extends App {
 
   stdOut(apply(stdIn))
 }
+
+/** Complementing a Strand of DNA. */
+object REVC extends App {
+
+  def apply(input: Chars): Chars = input
+    .map(c => c match {
+      case 'A' => 'T'
+      case 'T' => 'A'
+      case 'C' => 'G'
+      case 'G' => 'C'
+      case x   => x
+    })
+    .reverse
+
+  stdOut(apply(stdIn))
+}

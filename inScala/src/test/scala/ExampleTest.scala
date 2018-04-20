@@ -25,6 +25,15 @@ class ExampleTest extends TestCase {
     assertStreams(expected, RNA(input))
   }
 
+  def testREVC {
+    assertStreams("A CC GGG TTTT", REVC("AAAA CCC GG T"))
+
+    val input: Chars = resource("revc/small.in")
+    val expected: Chars = resource("revc/small.out")
+
+    assertStreams(expected, REVC(input))
+  }
+
   def resource(path: String): Chars =
     Source.fromResource(path).toStream
 
