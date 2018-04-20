@@ -1,5 +1,6 @@
 import com.okayboom.rosalind.DnaSum
 import com.okayboom.rosalind.Tools._
+import scala.annotation.tailrec
 
 /** Count DNA Nucleotides. */
 object DNA extends App {
@@ -40,4 +41,31 @@ object REVC extends App {
     .reverse
 
   stdOut(apply(stdIn))
+}
+
+/** Finding a Motif in DNA. */
+object SUBS extends App {
+
+  def allMotifIndexes(data: String, motif: String): List[Int] = {
+
+    @tailrec
+    def loop(startIndex: Int = 0, res: List[Int] = Nil): List[Int] =
+      data.indexOf(motif, startIndex) match {
+        case -1 => res
+        case n  => loop(n + 1, n :: res)
+      }
+
+    loop().reverse
+  }
+
+  def apply(input: Lines): String = {
+    val data = input.head
+    val motif = input.tail.head
+
+    allMotifIndexes(data, motif)
+      .map(_ + 1)
+      .mkString(" ")
+  }
+
+  stdOut(apply(stdInLines))
 }

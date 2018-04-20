@@ -1,10 +1,9 @@
 import junit.framework.TestCase
 import scala.io.Source
 import org.junit.Assert._
+import com.okayboom.rosalind.Tools._
 
 class ExampleTest extends TestCase {
-
-  type Chars = Stream[Char]
 
   def testDNA {
     assertStreams("4 3 2 1\n", DNA("AAAA CCC GG T"))
@@ -33,6 +32,21 @@ class ExampleTest extends TestCase {
 
     assertStreams(expected, REVC(input))
   }
+
+  def testSUBS {
+
+    assertStreams(
+      "2 5 6 15 17 18",
+      SUBS("AUGCUUCAGAAAGGUCUUACG" :: "U" :: Nil toStream))
+
+    val input: Lines = resourceLines("subs/small.in")
+    val expected: Chars = resource("subs/small.out")
+
+    assertStreams(expected, SUBS(input))
+  }
+
+  def resourceLines(path: String): Lines =
+    Source.fromResource(path).getLines().toStream
 
   def resource(path: String): Chars =
     Source.fromResource(path).toStream
