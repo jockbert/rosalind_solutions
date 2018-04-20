@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# capture standard in
+read stdin
+
+# make sure JAR is up to date before running jar
+./gradlew inScala:assemble > /dev/null && \
+echo $stdin | scala -classpath inScala/build/libs/inScala.jar $1 

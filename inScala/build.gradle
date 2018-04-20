@@ -1,0 +1,24 @@
+
+plugins {
+    id "eclipse"
+    id "scala"
+}
+
+sourceSets {
+    test {
+        resources {
+            srcDirs += '../problems/'
+        }
+    }
+}
+
+
+dependencies {
+    implementation 'org.scala-lang:scala-library:2.11.+'
+    testImplementation 'com.novocode:junit-interface:0.11'
+}
+
+task runDNA(type:JavaExec) {
+   main = "DNA"
+   classpath = sourceSets.main.runtimeClasspath
+}
