@@ -1,8 +1,7 @@
 #!/bin/bash
 
-# capture standard in
-read stdin
+# Make sure JAR is up to date before running jar
+# and that gradle do not consume standard in stream
+echo "" | ./gradlew inScala:assemble > /dev/null && \
+scala -classpath inScala/build/libs/inScala.jar $1
 
-# make sure JAR is up to date before running jar
-./gradlew inScala:assemble > /dev/null && \
-echo $stdin | scala -classpath inScala/build/libs/inScala.jar $1 
