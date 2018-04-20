@@ -12,9 +12,12 @@ sourceSets {
     }
 }
 
+compileScala {
+    scalaCompileOptions.additionalParameters = ["-feature"]
+}
 
 dependencies {
-    implementation 'org.scala-lang:scala-library:2.11.+'
+    implementation 'org.scala-lang:scala-library:2.12.5'
     testImplementation 'com.novocode:junit-interface:0.11'
 }
 
