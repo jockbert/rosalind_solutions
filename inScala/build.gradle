@@ -7,7 +7,7 @@ plugins {
 sourceSets {
     test {
         resources {
-            srcDirs += '../problems/'
+            srcDirs += '../examples/'
         }
     }
 }
