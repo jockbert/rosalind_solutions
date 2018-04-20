@@ -16,6 +16,15 @@ class ExampleTest extends TestCase {
 
   }
 
+  def testRNA {
+    assertStreams("AAAA CCC GG U", RNA("AAAA CCC GG T"))
+
+    val input: Chars = resource("rna/small.in")
+    val expected: Chars = resource("rna/small.out")
+
+    assertStreams(expected, RNA(input))
+  }
+
   def resource(path: String): Chars =
     Source.fromResource(path).toStream
 

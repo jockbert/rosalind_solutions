@@ -1,9 +1,10 @@
 import com.okayboom.rosalind.DnaSum
 import com.okayboom.rosalind.Tools._
 
+/** Count DNA Nucleotides. */
 object DNA extends App {
 
-  def apply(input: Stream[Char]): String = {
+  def apply(input: Chars): String = {
 
     val sum: DnaSum = input
       .aggregate(DnaSum.ZERO)(
@@ -12,6 +13,15 @@ object DNA extends App {
 
     s"${sum.a} ${sum.c} ${sum.g} ${sum.t}\n"
   }
+
+  stdOut(apply(stdIn))
+}
+
+/** Transcribing DNA into RNA. */
+object RNA extends App {
+
+  def apply(input: Chars): Chars = input
+    .map(c => if (c == 'T') 'U' else c)
 
   stdOut(apply(stdIn))
 }
