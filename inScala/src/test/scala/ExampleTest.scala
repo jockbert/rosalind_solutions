@@ -6,13 +6,10 @@ import com.okayboom.rosalind.Tools._
 class ExampleTest extends TestCase {
 
   def testDNA {
-    assertStreams("4 3 2 1\n", DNA("AAAA CCC GG T"))
-
     val input: Chars = resource("dna/small.in")
     val expected: Chars = resource("dna/small.out")
 
-    assertStreams(expected, DNA(input))
-
+    assertStreams(expected, DNA(input.par))
   }
 
   def testRNA {
