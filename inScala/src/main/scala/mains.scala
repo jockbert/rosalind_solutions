@@ -4,6 +4,45 @@ import scala.annotation.tailrec
 import scala.collection.parallel.ParSeq
 import scala.util.Random
 import scala.collection.GenSeq
+import java.io.PrintStream
+import java.io.BufferedOutputStream
+import java.io.PrintWriter
+
+object GenerateData extends App {
+
+  def printUsage(message: String): Unit = {
+    println(message)
+    println("Usage: <file_size> <character_pool>")
+    System.exit(1)
+  }
+
+  def toInt(s: String): Option[Int] =
+    try Some(s.toInt)
+    catch { case e: Exception => None }
+
+  def generator(pool: String)(): Char =
+    pool.charAt(Random.nextInt(pool.length()))
+
+  if (args.length != 2) printUsage(
+    "Bad number of arguments " + args.length + " != 2.")
+
+  val maybeSize = toInt(args(0))
+
+  if (maybeSize.isEmpty) printUsage(
+    "Bad file size '" + args(0) + "'")
+
+  val size = maybeSize.get
+
+  if (size < 0) printUsage(
+    "Bad file size " + size)
+
+  val charSource = generator(args(1)) _
+  val out = new PrintWriter(new BufferedOutputStream(System.out))
+
+  for (_ <- 0 until size) out.append(charSource())
+  out.println()
+  out.flush()
+}
 
 /** Count DNA Nucleotides. */
 object DNA extends App {

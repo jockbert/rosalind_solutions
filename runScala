@@ -3,5 +3,5 @@
 # Make sure JAR is up to date before running jar
 # and that gradle do not consume standard in stream
 echo "" | ./gradlew inScala:assemble > /dev/null && \
-scala -J-Xmx4g -classpath inScala/build/libs/inScala.jar $1
+scala -J-Xmx4g -classpath inScala/build/libs/inScala.jar $@
 

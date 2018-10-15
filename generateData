@@ -1,0 +1,8 @@
+#!/bin/sh
+
+./gradlew build
+echo "Compilation done. Generating data..."
+./runScala GenerateData 1000000 ACGT > examples/dna/1MB.in
+./runScala GenerateData 10000000 ACGT > examples/dna/10MB.in
+./runScala GenerateData 100000000 ACGT > examples/dna/100MB.in
+./runScala GenerateData 1000000000 ACGT > examples/dna/1GB.in
