@@ -7,6 +7,7 @@ import scala.collection.GenSeq
 import java.io.PrintStream
 import java.io.BufferedOutputStream
 import java.io.PrintWriter
+import scala.collection.parallel.ParIterable
 
 object GenerateData extends App {
 
@@ -47,7 +48,7 @@ object GenerateData extends App {
 /** Count DNA Nucleotides. */
 object DNA extends App {
 
-  def apply(input: GenSeq[Char]): String = {
+  def apply(input: ParIterable[Char]): String = {
 
     val sum: DnaSum = input
       .aggregate(DnaSum.ZERO)(
@@ -57,13 +58,13 @@ object DNA extends App {
     s"${sum.a} ${sum.c} ${sum.g} ${sum.t}\n"
   }
 
-  stdOut(apply(stdIn.par))
+  stdOut(apply(fileIn(args(0)).getLines().mkString("").par))
 }
 
 /** Count DNA Nucleotides in single thread. */
 object DNA_single extends App {
 
-  def apply(input: GenSeq[Char]): String = {
+  def apply(input: Iterator[Char]): String = {
 
     val sum: DnaSum = input
       .foldLeft(DnaSum.ZERO)(
@@ -72,7 +73,7 @@ object DNA_single extends App {
     s"${sum.a} ${sum.c} ${sum.g} ${sum.t}\n"
   }
 
-  stdOut(apply(fileIn(args(0))))
+  stdOut(apply(fileIn(args(0)).toIterator))
 }
 
 /** Count DNA Nucleotides in tail recursive single thread. */
@@ -83,7 +84,7 @@ object DNA_recursive extends App {
     if (input.isEmpty) s"${sum.a} ${sum.c} ${sum.g} ${sum.t}\n"
     else apply(input.tail, sum.inc(input.head))
 
-  stdOut(apply(fileIn(args(0))))
+  stdOut(apply(fileIn(args(0)).toStream))
 }
 
 /** Compare DNA and DNA_single. */
@@ -129,7 +130,7 @@ object DNA_compare extends App {
   sizes.foreach(size => {
     val data: Seq[Char] = generateDNA(size)
     val parData: ParSeq[Char] = data.par
-    val (foldRes, foldTime) = mcroTime(() => DNA_single(data))
+    val (foldRes, foldTime) = mcroTime(() => DNA_single(data.iterator))
     val (aggrRes, aggrTime) = mcroTime(() => DNA(parData))
     val aggrSpeedup = 1.0 * foldTime / aggrTime
     val sameRes = foldRes == aggrRes
