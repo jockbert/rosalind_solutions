@@ -75,6 +75,17 @@ object DNA_single extends App {
   stdOut(apply(fileIn(args(0))))
 }
 
+/** Count DNA Nucleotides in tail recursive single thread. */
+object DNA_recursive extends App {
+
+  @tailrec
+  def apply(input: Chars, sum: DnaSum = DnaSum.ZERO): String =
+    if (input.isEmpty) s"${sum.a} ${sum.c} ${sum.g} ${sum.t}\n"
+    else apply(input.tail, sum.inc(input.head))
+
+  stdOut(apply(fileIn(args(0))))
+}
+
 /** Compare DNA and DNA_single. */
 object DNA_compare extends App {
 
