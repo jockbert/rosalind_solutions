@@ -72,7 +72,7 @@ object DNA_single extends App {
     s"${sum.a} ${sum.c} ${sum.g} ${sum.t}\n"
   }
 
-  stdOut(apply(stdIn))
+  stdOut(apply(fileIn(args(0))))
 }
 
 /** Compare DNA and DNA_single. */

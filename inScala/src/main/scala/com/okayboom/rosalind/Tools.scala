@@ -13,6 +13,13 @@ object Tools {
     .takeWhile(_ != -1)
     .map(_.toChar)
 
+  def fileIn(name: String): Chars = {
+    val file = new java.io.File(name);
+
+    io.Source.fromFile(
+      file, io.Codec.ISO8859.name).toStream
+  }
+
   def stdInLines: Lines = Source
     .stdin.getLines().toStream
 
