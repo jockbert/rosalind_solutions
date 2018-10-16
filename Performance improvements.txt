@@ -1,0 +1,186 @@
+
+
+DNA_single, Vanilla
+========================
+$ time ./runScala DNA_single < examples/dna/100MB.in 
+25002106 24995981 24997292 25004621
+
+real	1m34.071s
+user	4m50.580s
+sys	0m2.400s
+
+
+DNA_single, Buffered Input stream, buffer size 100
+=======================
+$ time ./runScala DNA_single < examples/dna/100MB.in 
+25002106 24995981 24997292 25004621
+
+real	1m58.818s
+user	5m52.436s
+sys	0m2.920s
+
+
+DNA_single, Bufferd input stream, buffer size 1000
+==========================
+$ time ./runScala DNA_single < examples/dna/100MB.in 
+25002106 24995981 24997292 25004621
+
+real	1m55.353s
+user	5m45.980s
+sys	0m3.068s
+
+
+DNA_single, io.Source.stdin.bufferedReader()
+============================
+$ time ./runScala DNA_single < examples/dna/100MB.in 
+25002106 24995981 24997292 25004621
+
+real	1m31.951s
+user	4m43.196s
+sys	0m2.148s
+
+
+DNA_single, io.Source.stdin.reader()
+=========================
+$ time ./runScala DNA_single < examples/dna/100MB.in 
+25002106 24995981 24997292 25004621
+
+real	1m52.675s
+user	5m31.588s
+sys	0m2.860s
+
+
+DNA_single, io.Source.fromFile, UTF8, default buffer
+=======================================
+$ time ./runScala DNA_single examples/dna/100MB.in 
+25002106 24995981 24997292 25004621
+
+real	1m25.291s
+user	3m52.024s
+sys	0m1.952s
+
+
+DNA_single, io.Source.fromFile, ISO8859, default buffer
+=======================================
+$ time ./runScala DNA_single examples/dna/100MB.in 
+25002106 24995981 24997292 25004621
+
+real	1m14.088s
+user	3m33.964s
+sys	0m1.880s
+
+
+DNA_recursive reading file, UTF8, default buffer
+==========================
+$ time ./runScala DNA_recursive examples/dna/100MB.in 
+25002106 24995981 24997292 25004621
+
+real	0m8.730s
+user	0m8.968s
+sys	0m0.112s
+
+
+DNA_recursive reading file, ISO8859, default buffer
+==========================
+$ time ./runScala DNA_recursive examples/dna/100MB.in 
+25002106 24995981 24997292 25004621
+
+real	0m8.268s
+user	0m8.500s
+sys	0m0.136s
+
+
+DNA_recursive reading file, ISO8859, buffer size 204800
+==========================
+$ time ./runScala DNA_recursive examples/dna/100MB.in 
+25002106 24995981 24997292 25004621
+
+real	0m8.163s
+user	0m8.376s
+sys	0m0.160s
+
+
+DNA_recursive reading standard in
+==========================
+ $ time ./runScala DNA_recursive < examples/dna/100MB.in 
+25002106 24995981 24997292 25004621
+
+real	0m13.626s
+user	0m13.768s
+sys	0m0.152s
+
+
+Big data set
+===========================
+$ time ./runScala DNA_recursive  examples/dna/1GB.in 
+250009638 249997579 249990176 250002607
+
+real	1m20.372s
+user	1m20.256s
+sys	0m0.532s
+
+
+DNA parallell, iterator instead of stream
+==============================
+ $ time ./runScala DNA  examples/dna/100MB.in 
+25002106 24995981 24997292 25004621
+
+real	1m34.977s
+user	4m57.660s
+sys	0m2.492s
+
+
+DNA_single, using iterator instead of stream
+=============================================
+$ time ./runScala DNA_single examples/dna/100MB.in 
+25002106 24995981 24997292 25004621
+
+real	0m6.145s
+user	0m6.284s
+sys	0m0.180s
+
+DNA parallell, using .getLines().mkString("").par instead of stream
+============================================= 
+$ time ./runScala DNA examples/dna/100MB.in 
+25002106 24995981 24997292 25004621
+
+real	0m15.574s
+user	0m19.484s
+sys	0m1.064s
+
+
+
+With latest improvements
+===============================================
+$ time ./runScala DNA_compare 
+
+Available processors: 4
+
+      Size   FoldLeft  Aggregate    Speedup        Same
+                 [µs]       [µs]     factor      result
+-------------------------------------------------------
+        10      3 111     19 537      0,16         true
+        20      4 178      1 388      3,01         true
+        50        196      1 835      0,11         true
+       100        274      2 454      0,11         true
+       200        457      1 440      0,32         true
+       500        427      1 628      0,26         true
+     1 000        318      2 123      0,15         true
+     2 000        377      4 126      0,09         true
+     5 000        674      3 697      0,18         true
+    10 000        423      1 572      0,27         true
+    20 000        754      1 939      0,39         true
+    50 000      1 356      1 916      0,71         true
+   100 000      2 953      2 430      1,22         true
+   200 000      5 787      3 958      1,46         true
+   500 000     14 759      9 102      1,62         true
+ 1 000 000     30 752     15 911      1,93         true
+ 2 000 000     59 650     21 276      2,80         true
+ 5 000 000    145 613     57 047      2,55         true
+10 000 000    291 623    101 102      2,88         true
+20 000 000    585 662    222 374      2,63         true
+50 000 000  5 662 856    839 224      6,75         true
+
+real	4m10.325s
+user	14m4.124s
+sys	0m4.540s
