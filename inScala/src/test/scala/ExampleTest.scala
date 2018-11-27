@@ -20,6 +20,12 @@ class ExampleTest extends TestCase {
     assertStreams(expected, DNA_mapped(input))
   }
 
+  def testDNA_mapped_bare {
+    val input: ByteBuffer = resourceBuffer("dna/small.in")
+    val expected: Chars = resource("dna/small.out")
+    assertStreams(expected, DNA_mapped_bare(input))
+  }
+
   def testRNA {
     assertStreams("AAAA CCC GG U", RNA("AAAA CCC GG T"))
 

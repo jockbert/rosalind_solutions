@@ -95,6 +95,35 @@ object DNA_mapped extends App {
   stdOut(apply(memoryMappedFile(args(0))))
 }
 
+/**
+ * Count DNA Nucleotides in single thread using memory mapped file
+ * and avoiding leaving "bread crumbs" for GC to pick up.
+ */
+object DNA_mapped_bare extends App {
+
+  def apply(input: ByteBuffer): String = {
+    var a = 0
+    var c = 0
+    var g = 0
+    var t = 0
+
+    while (input.hasRemaining()) {
+      val char = input.get().asInstanceOf[Char]
+      char match {
+        case 'A' => a = a + 1
+        case 'C' => c = c + 1
+        case 'G' => g = g + 1
+        case 'T' => t = t + 1
+        case _   =>
+      }
+    }
+
+    s"$a $c $g $t\n"
+  }
+
+  stdOut(apply(memoryMappedFile(args(0))))
+}
+
 /** Count DNA Nucleotides in tail recursive single thread. */
 object DNA_recursive extends App {
 
