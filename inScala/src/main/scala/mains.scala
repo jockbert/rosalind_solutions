@@ -8,6 +8,8 @@ import java.io.PrintStream
 import java.io.BufferedOutputStream
 import java.io.PrintWriter
 import scala.collection.parallel.ParIterable
+import java.nio.CharBuffer
+import java.nio.ByteBuffer
 
 object GenerateData extends App {
 
@@ -74,6 +76,23 @@ object DNA_single extends App {
   }
 
   stdOut(apply(fileIn(args(0)).toIterator))
+}
+
+/** Count DNA Nucleotides in single thread using memory mapped file. */
+object DNA_mapped extends App {
+
+  def apply(input: ByteBuffer): String = {
+    var sum = DnaSum.ZERO
+
+    while (input.hasRemaining()) {
+      val char = input.get().asInstanceOf[Char]
+      sum = sum.inc(char)
+    }
+
+    s"${sum.a} ${sum.c} ${sum.g} ${sum.t}\n"
+  }
+
+  stdOut(apply(memoryMappedFile(args(0))))
 }
 
 /** Count DNA Nucleotides in tail recursive single thread. */

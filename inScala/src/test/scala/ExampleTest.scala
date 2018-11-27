@@ -2,6 +2,8 @@ import junit.framework.TestCase
 import scala.io.Source
 import org.junit.Assert._
 import com.okayboom.rosalind.Tools._
+import java.nio.CharBuffer
+import java.nio.ByteBuffer
 
 class ExampleTest extends TestCase {
 
@@ -10,6 +12,12 @@ class ExampleTest extends TestCase {
     val expected: Chars = resource("dna/small.out")
 
     assertStreams(expected, DNA_parallel(input.par))
+  }
+
+  def testDNA_mapped {
+    val input: ByteBuffer = resourceBuffer("dna/small.in")
+    val expected: Chars = resource("dna/small.out")
+    assertStreams(expected, DNA_mapped(input))
   }
 
   def testRNA {
@@ -47,6 +55,11 @@ class ExampleTest extends TestCase {
 
   def resource(path: String): Chars =
     Source.fromResource(path).toStream
+
+  def resourceBuffer(path: String): ByteBuffer = {
+    val str = Source.fromResource(path).mkString
+    ByteBuffer.wrap(str.getBytes())
+  }
 
   def assertStreams(expected: Chars, actual: Chars) =
     assertEquals(expected.mkString, actual.mkString)
