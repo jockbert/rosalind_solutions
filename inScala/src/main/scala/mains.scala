@@ -46,7 +46,7 @@ object GenerateData extends App {
 }
 
 /** Count DNA Nucleotides. */
-object DNA extends App {
+object DNA_parallel extends App {
 
   def apply(input: ParIterable[Char]): String = {
 
@@ -123,18 +123,18 @@ object DNA_compare extends App {
   println()
   println("Available processors: " + Runtime.getRuntime().availableProcessors())
   println()
-  println("      Size   FoldLeft  Aggregate    Speedup        Same")
+  println("      Size     Single   Parallel    Speedup        Same")
   println("                 [µs]       [µs]     factor      result")
   println("-------------------------------------------------------")
 
   sizes.foreach(size => {
     val data: Seq[Char] = generateDNA(size)
     val parData: ParSeq[Char] = data.par
-    val (foldRes, foldTime) = mcroTime(() => DNA_single(data.iterator))
-    val (aggrRes, aggrTime) = mcroTime(() => DNA(parData))
-    val aggrSpeedup = 1.0 * foldTime / aggrTime
-    val sameRes = foldRes == aggrRes
-    println(f"$size%,10d $foldTime%,10d $aggrTime%,10d $aggrSpeedup%,9.2f $sameRes%12b")
+    val (singleRes, singleTime) = mcroTime(() => DNA_single(data.iterator))
+    val (parallelRes, parallelTime) = mcroTime(() => DNA_parallel(parData))
+    val aggrSpeedup = 1.0 * singleTime / parallelTime
+    val sameRes = singleRes == parallelRes
+    println(f"$size%,10d $singleTime%,10d $parallelTime%,10d $aggrSpeedup%,9.2f $sameRes%12b")
   })
 
 }

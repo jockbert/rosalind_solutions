@@ -9,7 +9,7 @@ class ExampleTest extends TestCase {
     val input: Chars = resource("dna/small.in")
     val expected: Chars = resource("dna/small.out")
 
-    assertStreams(expected, DNA(input.par))
+    assertStreams(expected, DNA_parallel(input.par))
   }
 
   def testRNA {
