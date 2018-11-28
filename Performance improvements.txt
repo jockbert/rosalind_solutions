@@ -1,186 +1,171 @@
 
+== With 100MB ======================================
 
-DNA_single, Vanilla
-========================
-$ time ./runScala DNA_single < examples/dna/100MB.in 
+$ ./runScala DNA_parallel examples/dna/100MB.in
 25002106 24995981 24997292 25004621
 
-real	1m34.071s
-user	4m50.580s
-sys	0m2.400s
+real	0m11.420s
+user	0m15.552s
+sys	0m0.736s
 
-
-DNA_single, Buffered Input stream, buffer size 100
-=======================
-$ time ./runScala DNA_single < examples/dna/100MB.in 
+$ ./runScala DNA_single examples/dna/100MB.in
 25002106 24995981 24997292 25004621
 
-real	1m58.818s
-user	5m52.436s
-sys	0m2.920s
-
-
-DNA_single, Bufferd input stream, buffer size 1000
-==========================
-$ time ./runScala DNA_single < examples/dna/100MB.in 
-25002106 24995981 24997292 25004621
-
-real	1m55.353s
-user	5m45.980s
-sys	0m3.068s
-
-
-DNA_single, io.Source.stdin.bufferedReader()
-============================
-$ time ./runScala DNA_single < examples/dna/100MB.in 
-25002106 24995981 24997292 25004621
-
-real	1m31.951s
-user	4m43.196s
-sys	0m2.148s
-
-
-DNA_single, io.Source.stdin.reader()
-=========================
-$ time ./runScala DNA_single < examples/dna/100MB.in 
-25002106 24995981 24997292 25004621
-
-real	1m52.675s
-user	5m31.588s
-sys	0m2.860s
-
-
-DNA_single, io.Source.fromFile, UTF8, default buffer
-=======================================
-$ time ./runScala DNA_single examples/dna/100MB.in 
-25002106 24995981 24997292 25004621
-
-real	1m25.291s
-user	3m52.024s
-sys	0m1.952s
-
-
-DNA_single, io.Source.fromFile, ISO8859, default buffer
-=======================================
-$ time ./runScala DNA_single examples/dna/100MB.in 
-25002106 24995981 24997292 25004621
-
-real	1m14.088s
-user	3m33.964s
-sys	0m1.880s
-
-
-DNA_recursive reading file, UTF8, default buffer
-==========================
-$ time ./runScala DNA_recursive examples/dna/100MB.in 
-25002106 24995981 24997292 25004621
-
-real	0m8.730s
-user	0m8.968s
+real	0m5.474s
+user	0m5.712s
 sys	0m0.112s
 
-
-DNA_recursive reading file, ISO8859, default buffer
-==========================
-$ time ./runScala DNA_recursive examples/dna/100MB.in 
+$ ./runScala DNA_mapped examples/dna/100MB.in
 25002106 24995981 24997292 25004621
 
-real	0m8.268s
-user	0m8.500s
-sys	0m0.136s
+real	0m1.943s
+user	0m2.032s
+sys	0m0.144s
 
-
-DNA_recursive reading file, ISO8859, buffer size 204800
-==========================
-$ time ./runScala DNA_recursive examples/dna/100MB.in 
+$ ./runScala DNA_mapped_bare examples/dna/100MB.in
 25002106 24995981 24997292 25004621
 
-real	0m8.163s
-user	0m8.376s
-sys	0m0.160s
+real	0m1.296s
+user	0m1.464s
+sys	0m0.040s
 
 
-DNA_recursive reading standard in
-==========================
- $ time ./runScala DNA_recursive < examples/dna/100MB.in 
-25002106 24995981 24997292 25004621
+== With 1GB of data =================================
 
-real	0m13.626s
-user	0m13.768s
-sys	0m0.152s
-
-
-Big data set
-===========================
-$ time ./runScala DNA_recursive  examples/dna/1GB.in 
+$ ./runScala DNA_mapped examples/dna/1GB.in
 250009638 249997579 249990176 250002607
 
-real	1m20.372s
-user	1m20.256s
-sys	0m0.532s
+real	0m14.596s
+user	0m14.672s
+sys	0m0.216s
+
+$ ./runScala DNA_mapped_bare examples/dna/1GB.in
+250009638 249997579 249990176 Sum(250009638,249997579,249990176,250002607).t}
+
+real	0m8.268s
+user	0m8.344s
+sys	0m0.088s
 
 
-DNA parallell, iterator instead of stream
-==============================
- $ time ./runScala DNA  examples/dna/100MB.in 
-25002106 24995981 24997292 25004621
-
-real	1m34.977s
-user	4m57.660s
-sys	0m2.492s
+== With profiling =================================
 
 
-DNA_single, using iterator instead of stream
-=============================================
-$ time ./runScala DNA_single examples/dna/100MB.in 
-25002106 24995981 24997292 25004621
+$ ./runScala DNA_mapped examples/dna/1GB.in
+250009638 249997579 249990176 250002607
 
-real	0m6.145s
-user	0m6.284s
-sys	0m0.180s
+Flat profile of 17,77 secs (1595 total ticks): main
 
-DNA parallell, using .getLines().mkString("").par instead of stream
-============================================= 
-$ time ./runScala DNA examples/dna/100MB.in 
-25002106 24995981 24997292 25004621
+  Interpreted + native   Method
+  0,1%     0  +     1    sun.misc.Unsafe.getLong
+  0,1%     0  +     1    sun.misc.Unsafe.getByte
+  0,1%     0  +     1    java.lang.invoke.MethodHandleNatives.resolve
+  0,1%     0  +     1    sun.misc.Unsafe.defineAnonymousClass
+  0,1%     1  +     0    scala.reflect.ClassTag.newArray$
+  0,1%     1  +     0    scala.tools.nsc.settings.AbsSettings$AbsSetting.respondsTo$
+  0,1%     1  +     0    scala.collection.generic.Growable.$plus$plus$eq$
+  0,1%     1  +     0    scala.tools.nsc.Properties$.pickJarBasedOn
+  0,1%     0  +     1    java.util.zip.Inflater.inflateBytes
+  0,1%     1  +     0    scala.collection.mutable.HashSet$.empty
+  0,1%     1  +     0    scala.collection.mutable.ArrayOps$ofRef$.thisCollection$extension
+  0,1%     1  +     0    scala.collection.immutable.StringLike.scala$collection$immutable$StringLike$$isLineBreak
+  0,1%     1  +     0    scala.collection.mutable.MapLike.toSeq
+  0,1%     1  +     0    java.lang.String.toCharArray
+  0,1%     1  +     0    scala.Enumeration$ValueSet$$anon$1.<init>
+  0,1%     1  +     0    scala.reflect.internal.util.ScalaClassLoader.tryClass
+  0,1%     1  +     0    sun.nio.fs.UnixNativeDispatcher.copyToNativeBuffer
+  0,1%     1  +     0    java.lang.invoke.MethodHandles$Lookup.resolveOrFail
+  0,1%     1  +     0    java.util.jar.JarFile.match
+  0,1%     1  +     0    scala.tools.nsc.MainGenericRunner.process
+  0,1%     1  +     0    scala.collection.immutable.Map$Map3.updated
+  0,1%     1  +     0    scala.package$.<init>
+  0,1%     1  +     0    java.lang.invoke.Invokers.callSiteForm
+  0,1%     1  +     0    java.lang.invoke.InvokerBytecodeGenerator.generateCustomizedCodeBytes
+  0,1%     1  +     0    scala.tools.nsc.settings.ScalaSettings.$init$
+  1,6%    20  +     5    Total interpreted
 
-real	0m15.574s
-user	0m19.484s
-sys	0m1.064s
+     Compiled + native   Method
+ 97,4%  1488  +    66    DNA_mapped$.apply
+  0,1%     0  +     1    com.okayboom.rosalind.DnaSum.inc
+ 97,5%  1488  +    67    Total compiled
+
+         Stub + native   Method
+  0,1%     0  +     1    java.lang.Object.hashCode
+  0,1%     0  +     1    java.lang.Class.getComponentType
+  0,1%     0  +     2    Total stub
+
+  Thread-local ticks:
+  0,8%    13             Class loader
+
+
+Global summary of 17,77 seconds:
+100,0%  1608             Received ticks
+  0,8%    13             Received GC ticks
+  1,4%    23             Compilation
+  0,8%    13             Class loader
+
+real	0m17.857s
+user	0m16.828s
+sys	0m0.368s
 
 
 
-With latest improvements
-===============================================
-$ time ./runScala DNA_compare 
 
-Available processors: 4
 
-      Size   FoldLeft  Aggregate    Speedup        Same
-                 [µs]       [µs]     factor      result
--------------------------------------------------------
-        10      3 111     19 537      0,16         true
-        20      4 178      1 388      3,01         true
-        50        196      1 835      0,11         true
-       100        274      2 454      0,11         true
-       200        457      1 440      0,32         true
-       500        427      1 628      0,26         true
-     1 000        318      2 123      0,15         true
-     2 000        377      4 126      0,09         true
-     5 000        674      3 697      0,18         true
-    10 000        423      1 572      0,27         true
-    20 000        754      1 939      0,39         true
-    50 000      1 356      1 916      0,71         true
-   100 000      2 953      2 430      1,22         true
-   200 000      5 787      3 958      1,46         true
-   500 000     14 759      9 102      1,62         true
- 1 000 000     30 752     15 911      1,93         true
- 2 000 000     59 650     21 276      2,80         true
- 5 000 000    145 613     57 047      2,55         true
-10 000 000    291 623    101 102      2,88         true
-20 000 000    585 662    222 374      2,63         true
-50 000 000  5 662 856    839 224      6,75         true
+$ ./runScala DNA_mapped_bare examples/dna/1GB.in
+250009638 249997579 249990176 250002607
 
-real	4m10.325s
-user	14m4.124s
-sys	0m4.540s
+Flat profile of 9,03 secs (866 total ticks): main
+
+  Interpreted + native   Method
+  0,2%     2  +     0    scala.collection.mutable.FlatHashTable.index$
+  0,1%     0  +     1    java.security.AccessController.doPrivileged
+  0,1%     0  +     1    java.lang.invoke.MethodHandleNatives.resolve
+  0,1%     1  +     0    scala.collection.mutable.FlatHashTable.addEntry$
+  0,1%     1  +     0    scala.collection.generic.Growable.$plus$plus$eq$
+  0,1%     1  +     0    scala.tools.nsc.Properties$.pickJarBasedOn
+  0,1%     1  +     0    scala.collection.mutable.HashSet$.empty
+  0,1%     1  +     0    scala.collection.mutable.ArrayOps$ofRef$.thisCollection$extension
+  0,1%     1  +     0    java.lang.AbstractStringBuilder.<init>
+  0,1%     1  +     0    scala.collection.immutable.Vector.iterator
+  0,1%     1  +     0    DNA_mapped_bare$.delayedEndpoint$DNA_mapped_bare$1
+  0,1%     1  +     0    java.lang.invoke.LambdaForm$NamedFunction.intrinsicName
+  0,1%     1  +     0    java.lang.invoke.MethodHandleImpl.findCollector
+  0,1%     1  +     0    scala.collection.mutable.MapLike.toSeq
+  0,1%     1  +     0    java.util.ArrayList$SubList.listIterator
+  0,1%     1  +     0    scala.Enumeration$ValueSet$$anon$1.<init>
+  0,1%     1  +     0    java.util.Vector.<init>
+  0,1%     1  +     0    java.util.zip.InflaterInputStream.<init>
+  0,1%     1  +     0    java.util.regex.Matcher.group
+  0,1%     1  +     0    scala.tools.nsc.MainGenericRunner.process
+  0,1%     1  +     0    scala.package$.<init>
+  2,5%    20  +     2    Total interpreted
+
+     Compiled + native   Method
+ 95,5%   826  +     1    DNA_mapped_bare$.apply
+  0,1%     0  +     1    jdk.internal.org.objectweb.asm.Type.getDescriptor
+ 95,6%   826  +     2    Total compiled
+
+         Stub + native   Method
+  0,1%     0  +     1    java.lang.Object.getClass
+  0,1%     0  +     1    Total stub
+
+  Thread-local ticks:
+  1,7%    15             Class loader
+
+
+Flat profile of 0,00 secs (1 total ticks): DestroyJavaVM
+
+  Interpreted + native   Method
+100,0%     0  +     1    java.lang.Thread.setPriority0
+100,0%     0  +     1    Total interpreted
+
+
+Global summary of 9,04 seconds:
+100,0%   867             Received ticks
+  2,1%    18             Compilation
+  1,7%    15             Class loader
+
+real	0m9.104s
+user	0m9.088s
+sys	0m0.148s
+
