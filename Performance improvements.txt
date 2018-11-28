@@ -53,6 +53,13 @@ real	0m6.550s
 user	0m22.060s
 sys	0m0.228s
 
+$ ./runScala DNA_ultimate examples/dna/1GB.in
+250009638 249997579 249990176 250002607
+
+real	0m4.591s
+user	0m15.060s
+sys	0m0.292s
+
 
 == With profiling =================================
 

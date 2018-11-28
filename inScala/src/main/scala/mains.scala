@@ -155,6 +155,49 @@ object DNA_mapped_parallel extends App {
   stdOut(apply(memoryMappedFile(args(0))))
 }
 
+object DNA_ultimate extends App {
+  import DNA_mapped_bare._
+
+  /** No buffer partition less than a megabyte */
+  def minPartitionSize = 1024 * 1024
+
+  /**
+   * Ideal number of buffer partitions. Worst partition discretization error
+   *  ends up in about 0.1% of total running time.
+   */
+  def idealPartitionCount = 1000 * Runtime.getRuntime().availableProcessors()
+
+  /** Calculate ideal buffer partition size. */
+  def targetSize(totalRange: Range): Int =
+    Math.max(minPartitionSize, totalRange.size / idealPartitionCount)
+
+  /** Split the range up in roughly even parts up to target size. */
+  def split(range: Range, targetSize: Int): List[Range] =
+    if (range.size <= targetSize) range :: Nil
+    else {
+      val middle = (range.start + range.end) / 2
+      val ranges1 = split(range.start until middle, targetSize)
+      val ranges2 = split(middle until range.end, targetSize)
+      ranges1 ::: ranges2
+    }
+
+  /** Calculates DNA sum of given index range in input. */
+  def calculateSum(range: Range, input: ByteBuffer): Sum =
+    range.foldLeft(Sum(0, 0, 0, 0))((sum, index) => sum.inc(input.get(index)))
+
+  /** Calculate DNA sum of input. */
+  def apply(input: ByteBuffer): String = {
+    val totalRange: Range = input.position() until input.limit()
+    val partitions: List[Range] = split(totalRange, targetSize(totalRange))
+    val totalSum: Sum = partitions.par.
+      map(calculateSum(_, input)).
+      foldLeft(Sum(0, 0, 0, 0))(_ + _)
+    formatResult(totalSum)
+  }
+
+  stdOut(apply(memoryMappedFile(args(0))))
+}
+
 /** Count DNA Nucleotides in tail recursive single thread. */
 object DNA_recursive extends App {
 

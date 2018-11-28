@@ -26,6 +26,27 @@ class ExampleTest extends TestCase {
     assertStreams(expected, DNA_mapped_bare(input))
   }
 
+  def testTargetSize {
+    assertEquals(
+      DNA_ultimate.minPartitionSize,
+      DNA_ultimate.targetSize(0 until 10))
+  }
+
+  def testUltimateTargetSize {
+    assertEquals(
+      DNA_ultimate.minPartitionSize,
+      DNA_ultimate.targetSize(0 until 10))
+  }
+
+  def testUltimateSplit {
+    assertEquals(
+      (0 until 5) :: (5 until 10) :: Nil,
+      DNA_ultimate.split(0 until 10, 5))
+    assertEquals(
+      (1 until 6) :: (6 until 9) :: (9 until 12) :: Nil,
+      DNA_ultimate.split(1 until 12, 5))
+  }
+
   def testRNA {
     assertStreams("AAAA CCC GG U", RNA("AAAA CCC GG T"))
 
