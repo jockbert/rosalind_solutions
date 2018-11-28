@@ -95,6 +95,8 @@ object DNA_mapped extends App {
   stdOut(apply(memoryMappedFile(args(0))))
 }
 
+case class Sum(var a: Int, var c: Int, var g: Int, var t: Int) {}
+
 /**
  * Count DNA Nucleotides in single thread using memory mapped file
  * and avoiding leaving "bread crumbs" for GC to pick up.
@@ -102,23 +104,20 @@ object DNA_mapped extends App {
 object DNA_mapped_bare extends App {
 
   def apply(input: ByteBuffer): String = {
-    var a = 0
-    var c = 0
-    var g = 0
-    var t = 0
+    val sum = Sum(0, 0, 0, 0)
 
     while (input.hasRemaining()) {
       val char = input.get().asInstanceOf[Char]
       char match {
-        case 'A' => a = a + 1
-        case 'C' => c = c + 1
-        case 'G' => g = g + 1
-        case 'T' => t = t + 1
+        case 'A' => sum.a = sum.a + 1
+        case 'C' => sum.c = sum.c + 1
+        case 'G' => sum.g = sum.g + 1
+        case 'T' => sum.t = sum.t + 1
         case _   =>
       }
     }
 
-    s"$a $c $g $t\n"
+    s"${sum.a} ${sum.c} ${sum.g} ${sum.t}\n"
   }
 
   stdOut(apply(memoryMappedFile(args(0))))
