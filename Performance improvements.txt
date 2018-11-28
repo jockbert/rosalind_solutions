@@ -42,9 +42,16 @@ sys	0m0.216s
 $ ./runScala DNA_mapped_bare examples/dna/1GB.in
 250009638 249997579 249990176 250002607
 
-real	0m8.268s
-user	0m8.344s
-sys	0m0.088s
+real	0m7.812s
+user	0m7.932s
+sys	0m0.084s
+
+$ ./runScala DNA_mapped_parallel examples/dna/1GB.in
+250009638 249997579 249990176 250002607
+
+real	0m6.550s
+user	0m22.060s
+sys	0m0.228s
 
 
 == With profiling =================================
