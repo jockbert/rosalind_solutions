@@ -95,7 +95,25 @@ object DNA_mapped extends App {
   stdOut(apply(memoryMappedFile(args(0))))
 }
 
-case class Sum(var a: Int, var c: Int, var g: Int, var t: Int) {}
+case class Sum(var a: Int, var c: Int, var g: Int, var t: Int) {
+
+  def inc(b: Byte): Sum = {
+    b.asInstanceOf[Char] match {
+      case 'A' => a = a + 1
+      case 'C' => c = c + 1
+      case 'G' => g = g + 1
+      case 'T' => t = t + 1
+      case _   =>
+    }
+    this
+  }
+
+  def +(other: Sum) = Sum(
+    a + other.a,
+    c + other.c,
+    g + other.g,
+    t + other.t)
+}
 
 /**
  * Count DNA Nucleotides in single thread using memory mapped file
@@ -103,21 +121,35 @@ case class Sum(var a: Int, var c: Int, var g: Int, var t: Int) {}
  */
 object DNA_mapped_bare extends App {
 
-  def apply(input: ByteBuffer): String = {
+  def calculateSum(input: ByteBuffer): Sum = {
     val sum = Sum(0, 0, 0, 0)
 
-    while (input.hasRemaining()) {
-      val char = input.get().asInstanceOf[Char]
-      char match {
-        case 'A' => sum.a = sum.a + 1
-        case 'C' => sum.c = sum.c + 1
-        case 'G' => sum.g = sum.g + 1
-        case 'T' => sum.t = sum.t + 1
-        case _   =>
-      }
-    }
+    while (input.hasRemaining())
+      sum.inc(input.get())
 
+    sum
+  }
+
+  def formatResult(sum: Sum): String =
     s"${sum.a} ${sum.c} ${sum.g} ${sum.t}\n"
+
+  def apply(input: ByteBuffer): String =
+    formatResult(calculateSum(input))
+
+  stdOut(apply(memoryMappedFile(args(0))))
+}
+
+object DNA_mapped_parallel extends App {
+  import DNA_mapped_bare._
+
+  def apply(input: ByteBuffer): String = {
+    val totalRange = input.position() until input.limit()
+
+    val totalSum = totalRange.par.aggregate(Sum(0, 0, 0, 0))(
+      (sum, index) => sum.inc(input.get(index)),
+      (s1, s2) => s1 + s2)
+
+    formatResult(totalSum)
   }
 
   stdOut(apply(memoryMappedFile(args(0))))
