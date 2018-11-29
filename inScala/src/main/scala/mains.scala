@@ -108,6 +108,22 @@ case class Sum(var a: Int, var c: Int, var g: Int, var t: Int) {
     this
   }
 
+  val Abyte = 'A'.asInstanceOf[Byte]
+  val Cbyte = 'C'.asInstanceOf[Byte]
+  val Gbyte = 'G'.asInstanceOf[Byte]
+  val Tbyte = 'T'.asInstanceOf[Byte]
+
+  def incFast(b: Byte): Sum = {
+    b match {
+      case Abyte => a += 1
+      case Cbyte => c += 1
+      case Gbyte => g += 1
+      case Tbyte => t += 1
+      case _     =>
+    }
+    this
+  }
+
   def +(other: Sum) = Sum(
     a + other.a,
     c + other.c,
@@ -183,7 +199,7 @@ object DNA_ultimate extends App {
 
   /** Calculates DNA sum of given index range in input. */
   def calculateSum(range: Range, input: ByteBuffer): Sum =
-    range.foldLeft(Sum(0, 0, 0, 0))((sum, index) => sum.inc(input.get(index)))
+    range.foldLeft(Sum(0, 0, 0, 0))((sum, index) => sum.incFast(input.get(index)))
 
   /** Calculate DNA sum of input. */
   def apply(input: ByteBuffer): String = {
